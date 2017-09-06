@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		
+	</style>
+</head>
+<body>
+	<ul id="box">
+		<input type="text"	@keyup.enter="query()" v-model="nr"><hr/>
+		<li v-for="(value, key) in reulst">
+			<span>{{value.name}}</span>=
+			<span>{{value.age}}</span>=
+			<span>{{value.sort}}</span>
+			<button @click="del(key)">删除</button>
+			<button @click="edit(key)">编辑</button><hr/>
+		</li>
+		<input type="text" v-model="content">
+		<button v-html="judge === false ? '添加' : '编辑'" @click="judge == false ? add() : edit()"></button>
+	</ul>
+</body>
+<script src="vue.js"></script>
+<script>
+	var app = new Vue({
+		el: '#box',
+		data: {
+			content: '',//添加或编辑的内容
+			nr: '',//查询内容
+			judge: false,//判断编辑和添加
+			reulst: [
+				{name: '小明', age: 18, sort: 0},
+				{name: '小兰', age: 25, sort: 1},
+				{name: '小飞', age: 25, sort: 0},
+				{name: '小红', age: 36, sort: 1},
+				{name: '小紫', age: 47, sort: 1},
+				{name: '小山', age: 24, sort: 0},
+			],
+		},
+		methods: {
+			add: function () {
+				var re = this.content;
+				this.reulst.push({name: re,age: 18,sort: 1});
+				this.content = '';
+			},
+			del: function (key) {
+					this.reulst.splice(key,1);
+			},
+			query: function () {
+				var re = new RegExp(this.nr);
+				this.reulst = this.reulst.filter(function(item){
+					var reg = re.test(item.name | item.age);
+					return reg;
+				});
+			},
+			edit: function (key) {
+					// console.log(key);
+				if (this.judge === false) {
+					this.judge = key;
+					var value = this.reulst[key];
+					// console.log(value.name);
+					this.content = value.name+value.age+value.sort;
+				} else {
+					this.judge = key;
+					var re = this.content;
+					// this.reulst = this.reulst[key] = ({name: re,age: 18,sort: 1});
+				}
+				
+			},
+		},
+	});
+</script>
+</html>
